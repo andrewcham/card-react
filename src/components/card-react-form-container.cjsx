@@ -138,11 +138,11 @@ CardReactFormContainer = React.createClass
     switch inputName
       when inputsNames["expiry"]
         objVal = Payment.fns.cardExpiryVal inputValue
-        currentInputsValidationClass[inputsNames["expiry"]] = @getInputValidationClass(Payment.fns.validateCardExpiry objVal.month, objVal.year)
+        currentInputsValidationClass[inputsNames["expiry"]] = @getInputValidationClass(Stripe.validateExpiry objVal.month, objVal.year)
       when inputsNames["cvc"]
-        currentInputsValidationClass[inputsNames["cvc"]] = @getInputValidationClass(Payment.fns.validateCardCVC inputValue, @cardType)
+        currentInputsValidationClass[inputsNames["cvc"]] = @getInputValidationClass(Stripe.validateCVC inputValue)
       when inputsNames["number"]
-        currentInputsValidationClass[inputsNames["number"]] = @getInputValidationClass(Payment.fns.validateCardNumber inputValue)
+        currentInputsValidationClass[inputsNames["number"]] = @getInputValidationClass(Stripe.validateCardNumber inputValue)
       when inputsNames["name"]
         currentInputsValidationClass[inputsNames["name"]] = @getInputValidationClass(inputValue isnt "")
 
