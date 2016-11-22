@@ -23,6 +23,13 @@ CardReactFormContainer = React.createClass
   getInitialState: ->
     inputsValidationClass: {}
 
+  # format the text inside the number, cvc and expiry inputs
+  formatInputs: ->
+    inputsNames = @props.formInputsNames
+    Payment.formatCardNumber ReactDOM.findDOMNode(@refs[@inputsRefs[inputsNames["number"]]])
+    Payment.formatCardCVC ReactDOM.findDOMNode(@refs[@inputsRefs[inputsNames["cvc"]]])
+    Payment.formatCardExpiry ReactDOM.findDOMNode(@refs[@inputsRefs[inputsNames["expiry"]]])
+
   componentWillMount: ->
     @inputsValues = {}
     @inputsRefs = {}
@@ -45,19 +52,8 @@ CardReactFormContainer = React.createClass
       console.log "couldn't find react-card container by its id. please make sure the correct id is provided"
       return
 
-    # format number and cvc input elements.
-    if @props.formatting
-      @formatInputs()
-
     # render the card element for the first time
     @renderCardComponent()
-
-  # format the text inside the number, cvc and expiry inputs
-  formatInputs: ->
-    inputsNames = @props.formInputsNames
-    Payment.formatCardNumber ReactDOM.findDOMNode(@refs[@inputsRefs[inputsNames["number"]]])
-    Payment.formatCardCVC ReactDOM.findDOMNode(@refs[@inputsRefs[inputsNames["cvc"]]])
-    Payment.formatCardExpiry ReactDOM.findDOMNode(@refs[@inputsRefs[inputsNames["expiry"]]])
 
   # Render the card component into the DOM in the supplied this.cardContainer
   # according to React docs: "If the ReactElement was previously rendered into container,
@@ -117,6 +113,10 @@ CardReactFormContainer = React.createClass
   inputOnKeyUp: (event)->
     @inputsValues[event.target.name] = event.target.value
     @validateInput event.target.name, event.target.value
+
+    if @props.formatting
+      @formatInputs()
+
     @renderCardComponent()
 
   inputOnFocus: (event)->
